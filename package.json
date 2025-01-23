@@ -1,0 +1,44 @@
+{
+  "name": "auto-commit",
+  "displayName": "AutoCommit",
+  "description": "Automatically commit your changes with AI-generated commit messages using the Gemini API.",
+  "version": "1.0.0",
+  "engines": {
+    "vscode": "^1.75.0"
+  },
+  "categories": [
+    "Other"
+  ],
+  "activationEvents": [
+    "onCommand:autoCommit.commitSelectedFiles"
+  ],
+  "main": "./out/extension.js",
+  "contributes": {
+    "commands": [
+      {
+        "command": "autoCommit.commitSelectedFiles",
+        "title": "AutoCommit: Commit Selected Files"
+      }
+    ],
+    "configuration": {
+      "type": "object",
+      "title": "AutoCommit Settings",
+      "properties": {
+        "autoCommit.apiKey": {
+          "type": "string",
+          "default": "",
+          "description": "Your Gemini API key for generating commit messages."
+        }
+      }
+    }
+  },
+  "scripts": {
+    "compile": "tsc -p .",
+    "vscode:prepublish": "npm run compile"
+  },
+  "devDependencies": {
+    "@types/node": "^18.0.0",
+    "@types/vscode": "^1.75.0",
+    "typescript": "^5.0.0"
+  }
+}
