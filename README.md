@@ -1,71 +1,65 @@
-# autocommit README
+# Commit Wizard
 
-This is the README for your extension "autocommit". After writing up a brief description, we recommend including the following sections.
-
-## Features
-
-Describe specific features of your extension including screenshots of your extension in action. Image paths are relative to this README file.
-
-For example if there is an image subfolder under your extension project workspace:
-
-\!\[feature X\]\(images/feature-x.png\)
-
-> Tip: Many popular extensions utilize animations. This is an excellent way to show off your extension! We recommend short, focused animations that are easy to follow.
-
-## Requirements
-
-If you have any requirements or dependencies, add a section describing those and how to install and configure them.
-
-## Extension Settings
-
-Include if your extension adds any VS Code settings through the `contributes.configuration` extension point.
-
-For example:
-
-This extension contributes the following settings:
-
-* `myExtension.enable`: Enable/disable this extension.
-* `myExtension.thing`: Set to `blah` to do something.
-
-## Known Issues
-
-Calling out known issues can help limit users opening duplicate issues against your extension.
-
-## Release Notes
-
-Users appreciate release notes as you update your extension.
-
-### 1.0.0
-
-Initial release of ...
-
-### 1.0.1
-
-Fixed issue #.
-
-### 1.1.0
-
-Added features X, Y, and Z.
+Commit Wizard is a Visual Studio Code extension designed to streamline your Git workflow by automating the commit process with AI-generated messages. Powered by the Gemini API, Commit Wizard ensures your commit messages are concise, meaningful, and follow the **Conventional Commit** standard.
 
 ---
 
-## Following extension guidelines
+## Features
 
-Ensure that you've read through the extensions guidelines and follow the best practices for creating your extension.
+- **AI-Generated Commit Messages**: Automatically generate commit messages with Conventional Commit prefixes (e.g., `feat`, `fix`, `docs`, `style`, etc.).
+- **Streamlined Git Workflow**: Automates staging, generating a commit message, and committing files in one seamless process.
+- **Batch Commit by Directory**: Groups changed files by directories and commits them with AI-generated messages for better context.
+- **Customization**: Easily configure your Gemini API key and default commit prefix via VS Code settings.
 
-* [Extension Guidelines](https://code.visualstudio.com/api/references/extension-guidelines)
+---
 
-## Working with Markdown
+## Requirements
 
-You can author your README using Visual Studio Code. Here are some useful editor keyboard shortcuts:
+To use Commit Wizard, ensure the following prerequisites are met:
 
-* Split the editor (`Cmd+\` on macOS or `Ctrl+\` on Windows and Linux).
-* Toggle preview (`Shift+Cmd+V` on macOS or `Shift+Ctrl+V` on Windows and Linux).
-* Press `Ctrl+Space` (Windows, Linux, macOS) to see a list of Markdown snippets.
+1. **Git**: Installed and properly configured on your system.
+2. **Gemini API Key**: Obtain your API key from the [Gemini API Portal](https://gemini.google.com/).
+3. **Node.js**: Installed and available for running the extension.
 
-## For more information
+---
 
-* [Visual Studio Code's Markdown Support](http://code.visualstudio.com/docs/languages/markdown)
-* [Markdown Syntax Reference](https://help.github.com/articles/markdown-basics/)
+## Extension Settings
 
-**Enjoy!**
+Commit Wizard introduces the following settings to VS Code:
+
+- **`commitWizard.apiKey`**: Your Gemini API key for generating AI-powered commit messages. This key is required for the extension to work.
+- **`commitWizard.defaultPrefix`**: The fallback Conventional Commit prefix to use if the AI response is missing or invalid. Default: `"refactor"`.
+
+---
+
+## Installation
+
+1. Install Commit Wizard from the [VS Code Marketplace](https://marketplace.visualstudio.com/).
+2. Alternatively, download the `.vsix` package and manually install it in VS Code:
+   - Open the Extensions view (`Ctrl+Shift+X` / `Cmd+Shift+X`).
+   - Click the `...` (More Actions) menu and select **Install from VSIX**.
+   - Choose the downloaded `.vsix` file.
+
+---
+
+## Usage
+
+1. Open a project with a Git repository in VS Code.
+2. Go to **Settings** and configure your `commitWizard.apiKey` with your Gemini API key.
+3. Run the command **Commit Wizard: Run Auto-Commit Script** from the Command Palette (`Ctrl+Shift+P` / `Cmd+Shift+P`).
+4. The extension will:
+   - Detect all changed files in your repository.
+   - Group files by their top-level directory.
+   - Automatically generate AI-powered commit messages for each group.
+   - Commit the changes.
+
+---
+
+## Workflow Example
+
+1. **Change Files**: Make changes to your codebase.
+2. **Run Command**: Run the **Commit Wizard: Run Auto-Commit Script**.
+3. **AI-Generated Commit**: Let the AI handle your commit messages:
+   ```plaintext
+   Committed directory 'src' with: "feat: Added support for AI-based commit messages."
+   ```

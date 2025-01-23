@@ -1,44 +1,71 @@
 {
-  "name": "auto-commit",
+  "name": "commit-wizard",
   "displayName": "AutoCommit",
-  "description": "Automatically commit your changes with AI-generated commit messages using the Gemini API.",
-  "version": "1.0.0",
+  "description": "Effortlessly commit your changes with AI-generated commit messages using the Gemini API.",
+  "version": "1.1.0",
+  "publisher": "dhirajnikam1998",
   "engines": {
     "vscode": "^1.75.0"
   },
   "categories": [
-    "Other"
-  ],
-  "activationEvents": [
-    "onCommand:autoCommit.commitSelectedFiles"
+    "Other",
+    "Programming Languages",
+    "Extension Packs",
+    "Snippets",
+    "Linters",
+    "Themes",
+    "Debuggers",
+    "SCM Providers",
+    "Keymaps",
+    "Formatters",
+    "Languages",
+    "Testing"
   ],
   "main": "./out/extension.js",
+  "activationEvents": [
+    "onCommand:autoCommit.runScript"
+  ],
   "contributes": {
     "commands": [
       {
-        "command": "autoCommit.commitSelectedFiles",
-        "title": "AutoCommit: Commit Selected Files"
+        "command": "autoCommit.runScript",
+        "title": "Commit Wizard: Run Auto-Commit Script",
+        "category": "Git"
       }
     ],
     "configuration": {
       "type": "object",
-      "title": "AutoCommit Settings",
+      "title": "Commit Wizard Settings",
       "properties": {
-        "autoCommit.apiKey": {
+        "commitWizard.apiKey": {
           "type": "string",
           "default": "",
-          "description": "Your Gemini API key for generating commit messages."
+          "description": "Your Gemini API key for generating AI-driven commit messages."
+        },
+        "commitWizard.defaultPrefix": {
+          "type": "string",
+          "default": "refactor",
+          "description": "Default Conventional Commit prefix to use if AI response is missing or invalid."
         }
       }
     }
   },
   "scripts": {
     "compile": "tsc -p .",
-    "vscode:prepublish": "npm run compile"
+    "build": "npm run compile",
+    "package": "vsce package",
+    "lint": "eslint . --ext .ts",
+    "prepare": "npm run compile",
+    "test": "npm run lint"
+  },
+  "dependencies": {
+    "node-fetch": "^2.6.7"
   },
   "devDependencies": {
     "@types/node": "^18.0.0",
     "@types/vscode": "^1.75.0",
-    "typescript": "^5.0.0"
+    "typescript": "^5.0.0",
+    "eslint": "^8.50.0",
+    "vsce": "^2.15.0"
   }
 }
