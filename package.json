@@ -2,7 +2,7 @@
   "name": "commit-wizard",
   "displayName": "AutoCommit",
   "description": "Effortlessly commit your changes with AI-generated commit messages using the Gemini API.",
-  "version": "1.1.0",
+  "version": "1.1.1",
   "publisher": "dhirajnikam1998",
   "engines": {
     "vscode": "^1.75.0"
