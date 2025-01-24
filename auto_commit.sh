@@ -20,12 +20,6 @@ if [ -z "$files" ]; then
     exit 0
 fi
 
-declare -A file_groups
-for file in $files; do
-    dir=$(dirname "$file" | cut -d '/' -f 1)
-    file_groups["$dir"]+="$file "
-done
-
 get_commit_message_from_gemini() {
     local diff_summary="$1"
     local prompt="Generate a concise, one-line commit message with a Conventional Commit prefix from [${VALID_PREFIXES[*]}] based on these file changes:
@@ -65,47 +59,35 @@ sanitize_commit_message() {
     echo "$chosen_prefix: $ai_message"
 }
 
-declare -A commit_summaries
-for dir in "${!file_groups[@]}"; do
-    local group_diff_summary="Changes for directory '$dir':"
-    staged_any_file=false
+for file in $files; do
+    diff_summary="Changes for file '$file':"
 
-    for file in ${file_groups[$dir]}; do
-        if git ls-files --deleted | grep -q "$file"; then
-            group_diff_summary+=" [Deleted] $file."
-            git rm --cached -- "$file" 2>/dev/null || true
-        elif git ls-files --others --exclude-standard | grep -q "$file"; then
-            group_diff_summary+=" [New] $file content: $(cat "$file" 2>/dev/null)."
-            git add "$file" 2>/dev/null || true
-        else
-            local diff_out
-            diff_out=$(git diff "$file")
-            if [ -n "$diff_out" ]; then
-                group_diff_summary+=" [Modified] $file diff: $diff_out"
-            fi
-            git add "$file" 2>/dev/null || true
+    if git ls-files --deleted | grep -q "$file"; then
+        diff_summary+=" [Deleted] $file."
+        git rm --cached -- "$file" 2>/dev/null || true
+    elif git ls-files --others --exclude-standard | grep -q "$file"; then
+        diff_summary+=" [New] $file content: $(cat "$file" 2>/dev/null)."
+        git add "$file" 2>/dev/null || true
+    else
+        diff_out=$(git diff "$file")
+        if [ -n "$diff_out" ]; then
+            diff_summary+=" [Modified] $file diff: $diff_out"
         fi
-        staged_any_file=true
-    done
-
-    if [ "$staged_any_file" = false ]; then
-        continue
+        git add "$file" 2>/dev/null || true
     fi
 
-    ai_response=$(get_commit_message_from_gemini "$group_diff_summary")
+    ai_response=$(get_commit_message_from_gemini "$diff_summary")
     if [ -z "$ai_response" ]; then
-        echo "Skipping commit for '$dir'. No AI response."
-        git restore --staged ${file_groups[$dir]} 2>/dev/null || true
+        echo "Skipping commit for '$file'. No AI response."
+        git restore --staged "$file" 2>/dev/null || true
         continue
     fi
 
     final_commit_message=$(sanitize_commit_message "$ai_response")
     git commit -m "$final_commit_message" >/dev/null 2>&1 || true
-    commit_summaries["$dir"]="$final_commit_message"
+    echo "Committed '$file' with message: $final_commit_message"
 done
 
 echo -e "\n=========== Commit Summary ==========="
-for dir in "${!commit_summaries[@]}"; do
-    echo " - $dir -> ${commit_summaries[$dir]}"
-done
+git log --oneline -n $(echo "$files" | wc -w)
 echo "======================================"
