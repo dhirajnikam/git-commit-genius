@@ -8,7 +8,6 @@ Commit Wizard is a Visual Studio Code extension designed to streamline your Git 
 
 - **AI-Generated Commit Messages**: Automatically generate commit messages with Conventional Commit prefixes (e.g., `feat`, `fix`, `docs`, `style`, etc.).
 - **Streamlined Git Workflow**: Automates staging, generating a commit message, and committing files in one seamless process.
-- **Batch Commit by Directory**: Groups changed files by directories and commits them with AI-generated messages for better context.
 - **Customization**: Easily configure your Gemini API key and default commit prefix via VS Code settings.
 
 ---
