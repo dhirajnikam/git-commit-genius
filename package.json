@@ -1,65 +1,56 @@
 {
   "name": "commit-wizard",
   "displayName": "AutoCommit",
-  "description": "Effortlessly commit your changes with AI-generated commit messages using the Gemini API.",
-  "version": "1.1.1",
+  "description": "A VS Code extension to commit changes using Gemini API for generating commit messages.",
+  "version": "1.1.2",
   "publisher": "dhirajnikam1998",
   "engines": {
     "vscode": "^1.75.0"
   },
   "categories": [
-    "Other",
-    "Programming Languages",
-    "Extension Packs",
-    "Snippets",
-    "Linters",
-    "Themes",
-    "Debuggers",
-    "SCM Providers",
-    "Keymaps",
-    "Formatters",
-    "Languages",
-    "Testing"
+    "Other"
+  ],
+  "activationEvents": [
+    "onCommand:autoCommit.setGeminiKey",
+    "onCommand:autoCommit.commitAllChanges",
+    "onCommand:autoCommit.commitStagedChanges"
   ],
   "main": "./out/extension.js",
-  "activationEvents": [
-    "onCommand:autoCommit.runScript"
-  ],
   "contributes": {
     "commands": [
       {
-        "command": "autoCommit.runScript",
-        "title": "Commit Wizard: Run Auto-Commit Script",
-        "category": "Git"
+        "command": "autoCommit.setGeminiKey",
+        "title": "Set Gemini API Key"
+      },
+      {
+        "command": "autoCommit.commitAllChanges",
+        "title": "Commit All Changes Individually"
+      },
+      {
+        "command": "autoCommit.commitStagedChanges",
+        "title": "Commit Staged Changes"
       }
     ],
     "configuration": {
-      "type": "object",
-      "title": "Commit Wizard Settings",
+      "title": "Git Commit with Gemini",
       "properties": {
-        "commitWizard.apiKey": {
+        "autoCommit.apiKey": {
           "type": "string",
           "default": "",
-          "description": "Your Gemini API key for generating AI-driven commit messages."
-        },
-        "commitWizard.defaultPrefix": {
-          "type": "string",
-          "default": "refactor",
-          "description": "Default Conventional Commit prefix to use if AI response is missing or invalid."
+          "description": "API Key for Gemini AI to generate commit messages",
+          "scope": "global"
         }
       }
     }
   },
   "scripts": {
-    "compile": "tsc -p .",
-    "build": "npm run compile",
-    "package": "vsce package",
-    "lint": "eslint . --ext .ts",
-    "prepare": "npm run compile",
-    "test": "npm run lint"
-  },
-  "dependencies": {
-    "node-fetch": "^2.6.7"
+    "vscode:prepublish": "npm run compile",
+    "compile": "tsc -p ./",
+    "watch": "tsc -watch -p ./",
+    "lint": "eslint src --ext ts",
+    "pretest": "npm run compile && npm run lint",
+    "test": "npm run lint",
+    "package": "vsce package"
   },
   "devDependencies": {
     "@types/node": "^18.0.0",
